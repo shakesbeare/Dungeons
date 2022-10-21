@@ -30,7 +30,6 @@ public class CameraManager : MonoBehaviour
             // Viewport stuff
             camera.rect = new Rect(cameraViewportX, 0, cameraViewportWidth, 1);
 
-            Debug.Log(cameraViewportX);
             cameraViewportX += cameraViewportWidth;
 
             cameras.Add(camera);
