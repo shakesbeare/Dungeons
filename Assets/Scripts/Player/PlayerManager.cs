@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,32 @@ using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
 {
-    public PlayerInputManager inputManager;
+    [Range(1, 4)]
+    public int playerCount;
 
-    // Start is called before the first frame update
-    void Start()
+    public PlayerInputManager inputManager;
+    public EventHandler<OnCreatePlayersArgs> onCreatePlayers;
+
+    public class OnCreatePlayersArgs : EventArgs
     {
-        inputManager = GetComponent<PlayerInputManager>();
-        inputManager.JoinPlayer(-1, -1, "Keyboard&Mouse", Keyboard.current);
-        inputManager.JoinPlayer(-1, -1, "Gamepad", Gamepad.current);
+        public int playerCount;
+
+        public OnCreatePlayersArgs(int playerCount)
+        {
+            this.playerCount = playerCount;
+        }
     }
+
+    void Start() 
+    {
+        onCreatePlayers?.Invoke(this, new OnCreatePlayersArgs(playerCount));
+
+        inputManager = GetComponent<PlayerInputManager>();
+
+        for (int i = 0; i < playerCount; ++i)
+        {
+            inputManager.JoinPlayer(-1, -1);
+        }
+    }
+
 }

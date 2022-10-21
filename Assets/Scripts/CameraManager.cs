@@ -1,19 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    [Range(1, 4)]
-    public int playerCount;
+
     public GameObject cameraPrefab;
     public Transform cameraControllerTransform;
 
     private List<Camera> cameras;  
+    private int playerCount;
+    private PlayerManager playerManager;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        playerManager = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
+        playerManager.onCreatePlayers += OnCreatePlayers;
+
+    }
+
+    void OnCreatePlayers(object sender, PlayerManager.OnCreatePlayersArgs e) 
+    {
+        playerCount = e.playerCount;
+
         cameras = new List<Camera>();
         float cameraViewportX = 0f;
         float cameraViewportWidth = 1 / (float)playerCount;
@@ -41,4 +51,5 @@ public class CameraManager : MonoBehaviour
             }
         }
     }
+
 }
